@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from finadscript import FinAdWorker
+from keywords import keywords
 
 app = FastAPI()
 
@@ -22,7 +23,6 @@ class FinAdForm(BaseModel):
 
 @app.post("/fin-ad-analyze")
 async def upload_file(data: FinAdForm):
-    worker = FinAdWorker()
+    worker = FinAdWorker(keywords)
     response = worker.work(data.plain_text)
-    print(response)
     return {"response_text": response}
